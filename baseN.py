@@ -1,34 +1,96 @@
 import math
 possible='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 class BaseN:
-    """A class to handle arithmetic between bases"""
+    """A class to handle arithmetic between bases
+       Returns properties of self for natural numbers, decimal values otherwise
+       Value can be string representation for natural numbers, otherwise decimal"""
     def __init__(self, value, base, chrSet = possible):
         self.base = base
         self.chrSet = chrSet
         if type(value)== str:
-            value=value.upper()
-            self.bd=value
+            self.nVal = value
             self.decimal = baseNToDecimal(value, self.base, self.chrSet)
         else:
-            self.bd=decimalToBaseN(value, self.base, self.chrSet)
-            self.decimal=value
+            self.nVal = decimalToBaseN(value, self.base, self.chrSet)
+            self.decimal = value
 
     def __add__(self,other):
-        return decimalToBaseN(self.decimal+other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base >= 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal+other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal+other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal+other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal+other
     def __sub__(self,other):
-        return decimalToBaseN(self.decimal-other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal-other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal-other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal-other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal-other
     def __mul__(self, other):
-        return decimalToBaseN(self.decimal*other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal*other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal*other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal*other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal*other
     def __floordiv__(self, other):
-        return decimalToBaseN(self.decimal//other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal//other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal//other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal//other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal//other
     def __pow__(self, other):
-        return decimalToBaseN(self.decimal**other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal**other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal**other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal**other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal**other
     def __truediv__(self, other):
-        return decimalToBaseN(self.decimal/other.decimal, self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal/other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal/other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal/other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal/other
     def __mod__(self, other):
-        a=self.decimal
-        b=other.decimal
-        return decimalToBaseN(a-b*int(a/b), self.base, self.chrSet)
+        if self.base == int(self.base) and self.base > 1:
+            if type(other) == BaseN:
+                return decimalToBaseN(self.decimal%other.decimal, self.base, self.chrSet)
+            elif type(other) == int or type(other) == float:
+                return decimalToBaseN(self.decimal%other, self.base, self.chrSet)
+        else:
+            if type(other) == BaseN:
+                return self.decimal%other.decimal
+            elif type(other) == int or type(other) == float:
+                return self.decimal%other
     
     def fraction(self, other):
         integer=(self.decimal//other.decimal)
@@ -49,28 +111,47 @@ class BaseN:
         return decimalToBaseN(math.gamma(self.decimal+1), self.base, self.chrSet)
     
     def __eq__(self, other):
-        return self.decimal == other.decimal
+        if type(other) == BaseN:
+            return self.decimal == other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal == other
     def __ne__(self, other):
-        return self.decimal != other.decimal
+        if type(other) == BaseN:
+            return self.decimal != other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal != other
     def __gt__(self, other):
-        return self.decimal > other.decimal
+        if type(other) == BaseN:
+            return self.decimal > other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal > other
     def __ge__(self, other):
-        return self.decimal >= other.decimal
+        if type(other) == BaseN:
+            return self.decimal >= other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal >= other
     def __lt__(self, other):
-        return self.decimal < other.decimal
+        if type(other) == BaseN:
+            return self.decimal < other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal < other
     def __le__(self, other):
-        return self.decimal <= other.decimal
+        if type(other) == BaseN:
+            return self.decimal <= other.decimal
+        elif type(other) == int or type(other) == float:
+            return self.decimal <= other
         
     def __repr__(self):
-        return 'Base {} number {}.\nDecimal interpretation: {}.'\
-               .format(self.base, self.bd, self.decimal)
+        return 'Base {} number {}\nDecimal interpretation: {}\nCharacter set: {}'\
+               .format(self.base, self.nVal, self.decimal,self.chrSet)
     def __str__(self):
-        return self.bd
+        return self.nVal
 
 
     
 def decimalToBaseN(n, base, chrSet = possible):
-    """Converts a number N into its equivalent in base BASE"""
+    """Converts a number N into its equivalent in base BASE
+       Only consistently works with Natural Bases"""
     if n<0:
         negative = True
         n=abs(n)
@@ -234,7 +315,7 @@ def findPi(base,accuracy = 'full'):
                 if step <= math.pi:
                     break
             
-    return approx
+    return ''.join(approx)
 
 def intPi(fro,to):
     for e in range(fro,to+1):    
@@ -286,9 +367,38 @@ def findIntValue(base, value): #Helper for findValue()
                 nex=['0']
             if len(str(cur)) != len(str(nex)):
                 test = cur
-                test[-1]=str(int(test[-1])+1)
+                if base == int(base):
+                    test = BaseN(''.join(test),base)
+                    test += 1
+                else:
+                    if int(test[-1])+1 > base:
+                        it = -1
+                        try:
+                            while int(test[it])+1 > base:
+                                it -= 1
+                        except:
+                            length = len(test)
+                            test = ['1']
+                            for e in range(length):
+                                test.append('0')
+                        
+                        
+                    else:
+                        test[-1] = str(int(test[-1])+1)
                 if baseNToDecimal(test,base,chrSet) > value:
-                    test[-1]=str(int(test[-1])-1)
+                    if base == int(base):
+                        test = BaseN(test,base)
+                        test -= 1
+                    else:
+                        it = -1
+                        while test[it] == '0':
+                            it -=1
+                        test[it] = str(int(test[it])-1)
+                        for e in range(len(test)+it+1,len(test)):
+                            test[e] = str(int(test[e])+math.ceil(base)-1)
+                        it = 0
+                        while test[it] == '0':
+                            test = test[1:]                    
                     return ''.join(test)
                 cur[-len(nex):]=nex
                 initial = cur
@@ -299,8 +409,10 @@ def findIntValue(base, value): #Helper for findValue()
     return ''.join(initial)
     
 def findValue(base, value, accuracy = 'full'):
-    '''Approximate VALUE in a given BASE'''
+    '''Approximate VALUE in a given BASE for BASE > 1'''
     chrSet=possible[:math.ceil(base)]
+    if base <= 1:
+        return 'Invalid base'
     if value >= 1:
         approx = findIntValue(base, value)+'.'
     else:
@@ -316,6 +428,7 @@ def findValue(base, value, accuracy = 'full'):
                     break
     else:
         while baseNToDecimal(approx,base,chrSet) != value:
+            #print(''.join(approx))
             approx+='0'
             for e in range(math.ceil(base)):
                 approx = list(approx)
@@ -328,7 +441,8 @@ def findValue(base, value, accuracy = 'full'):
 
 
 
-
+#forty2 = BaseN(1965, 62)
+#sixty4 = BaseN(64, 62)
 #10 approximated in base pi
 #print(baseNToDecimal('23.2021120021000000300201212221',math.pi,possible))
 #print(baseNToDecimal('100.01022122221121122001111210202',math.pi,possible))
